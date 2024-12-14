@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  
+  <meta charset="utf-8">
+
+  <meta name="description" content="" />
+  <meta name="author" content="" />
+  <title>Gelanggang Inovasi & Kreativitas</title>
+  <link rel="icon" type="image/x-icon" href="assets/img/bw_ugm.png" />
+  <!-- Font Awesome icons (free version)-->
+  <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+  <!-- Google fonts-->
+  <link href="https://fonts.googleapis.com/css?family=Varela+Round" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet" />
+  <!-- Core theme CSS (includes Bootstrap)-->
+  <link href="css/styles.css" rel="stylesheet" />
+
+  <!-- Include the CesiumJS JavaScript and CSS files -->
+
+  <script src="https://cesium.com/downloads/cesiumjs/releases/1.112/Build/Cesium/Cesium.js"></script>
+
+  <link href="https://cesium.com/downloads/cesiumjs/releases/1.112/Build/Cesium/Widgets/widgets.css" rel="stylesheet">
+
+  <link rel="stylesheet" href="https://cesiumjs.org/Cesium/Build/Apps/Sandcastle/templates/bucket.css">
+  <script src = "https://sandcastle.cesium.com/Sandcastle-header.js"></script>
+  
+  <!-- Vendor CSS Files -->
+  <link href="assets/vendor/animate.css/animate.min.css" rel="stylesheet" />
+  <link href="assets/vendor/aos/aos.css" rel="stylesheet" />
+  <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet" />
+  <link href="assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet" />
+  <link href="assets/vendor/remixicon/remixicon.css" rel="stylesheet" />
+  <link href="assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet" />
+
+  <!-- Template Main CSS File -->
+  <link href="assets/css/style.css" rel="stylesheet" />
+
+  <style>
+    /* CSS untuk mengatur ukuran Cesium Viewer */
+    #cesiumContainer {
+      width: 100%; /* Set lebar ke 80% dari viewport */
+      height: 90vh; /* Set tinggi ke 60% dari tinggi viewport */
+      margin-top: 70px; /* Untuk menempatkan di tengah horizontal */
+      border: 2px solid #004A74; /* Opsional: Tambahkan border untuk kejelasan */
+    }
+  </style>
+
+
+  <style type="text/css">
+    #toggle-fpv { z-index: 1; position: fixed; top: 100px; left: 15px; }
+  </style>
+
+
+
+
+</head>
+
+<body>
+  <header id="header" class="fixed-top">
+    <div class="container d-flex align-items-center">
+      <a href="index.html" class="d-flex align-items-center logo me-auto">
+        <img src="assets/img/bw_ugm.png" alt="Logo UGM" style="height: 40px; margin-right: 5px;">
+        <span>Gelanggang Inovasi & Kreativitas</span>
+      </a>
+      <!-- Uncomment below if you prefer to use an image logo -->
+      <!-- <a href="index.html" class="logo me-auto"><img src="assets/img/logo.png" alt="" class="img-fluid"></a>-->
+  
+      <nav id="navbar" class="navbar order-last order-lg-0">
+        <ul>
+          <li><a href="index.html#about">Tentang</a></li>
+          <li><a href="index.html#basemap">Data</a></li>
+          <li><a href="index.html#ourteam">Tim Kami</a></li>
+          <li><a href="index.html#footer">Kontak</a></li>
+        </ul>
+        <i class="bi bi-list mobile-nav-toggle"></i>
+      </nav>
+      <!-- .navbar -->
+  
+      <a href="index.html" class="get-started-btn">Kembali ke Beranda</a>
+    </div>
+  </header>
+  
+
+  <div id="cesiumContainer" ></div>
+  <button id="toggle-fpv" >W untuk Maju <br> S untuk Mundur <br> A untuk Kiri <br>D untuk Kanan <br>Q untuk Atas/Naik <br>E untuk Bawah/Turun <br></button>
+  <script type="module">
+
+     // Replace number below with buildingID of your uploaded model on cesium ion at: https://ion.cesium.com/assets
+     const buildingID=  2925780;
+
+    // Your access token can be found at: https://ion.cesium.com/tokens.
+    // Replace `your_access_token` with your Cesium ion access token.
+
+    Cesium.Ion.defaultAccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiIwNThmYTc3YS03ZjNhLTQ1MmItODgzMy1kYzVmZTBhZjQ5YjIiLCJpZCI6MTgxNzEyLCJpYXQiOjE3MzM3NjI5OTB9.vIavBAuUCLopvbY_aYKs-cpKl-zrjfzL5PlO6UsrQgM';
+
+    // Initialize the Cesium Viewer in the HTML element with the `cesiumContainer` ID.
+    const viewer = new Cesium.Viewer('cesiumContainer', {
+      terrain: Cesium.Terrain.fromWorldTerrain(),
+    });    
+
+    // Add the 3D Tileset you created from your Cesium ion account.
+    const newBuildingTileset = await Cesium.Cesium3DTileset.fromIonAssetId(buildingID);
+    viewer.scene.primitives.add(newBuildingTileset);
+
+    // Initialize viewer with terrain
+    const tileset = viewer.scene.primitives.add(
+  await Cesium.Cesium3DTileset.fromIonAssetId(2918417),
+);
+
+    // Fly the camera to Denver, Colorado at the given longitude, latitude, and height.
+    viewer.camera.flyTo({
+    destination: Cesium.Cartesian3.fromDegrees( 110.375998,-7.775966,  185),
+    orientation: {
+        heading: Cesium.Math.toRadians(0), // Angle of rotation around the vertical axis (eastward)
+        pitch: Cesium.Math.toRadians(0), // Angle from the horizon (downward)
+        roll: 0 // Rotation around the camera's direction axis
+    },
+    duration: 3 // Optional: Fly to the destination in 3 seconds
+    });
+
+    // First Person View Camera--------------------------------------------------------------------------
+    const scene = viewer.scene;
+    const canvas = viewer.canvas;
+    canvas.setAttribute("tabindex", "0"); // needed to put focus on the canvas
+    canvas.onclick = function () {
+      canvas.focus();
+    };
+    const ellipsoid = scene.globe.ellipsoid;    
+
+    // disable the default event handlers
+    scene.screenSpaceCameraController.enableRotate = false;
+    scene.screenSpaceCameraController.enableTranslate = false;
+    scene.screenSpaceCameraController.enableZoom = false;
+    scene.screenSpaceCameraController.enableTilt = false;
+    scene.screenSpaceCameraController.enableLook = false;
+
+    let startMousePosition;
+    let mousePosition;
+    const flags = {
+      looking: false,
+      moveForward: false,
+      moveBackward: false,
+      moveUp: false,
+      moveDown: false,
+      moveLeft: false,
+      moveRight: false,
+    };
+
+    const handler = new Cesium.ScreenSpaceEventHandler(canvas);
+
+    handler.setInputAction(function (movement) {
+      flags.looking = true;
+      mousePosition = startMousePosition = Cesium.Cartesian3.clone(
+        movement.position
+      );
+    }, Cesium.ScreenSpaceEventType.LEFT_DOWN);
+
+    handler.setInputAction(function (movement) {
+      mousePosition = movement.endPosition;
+    }, Cesium.ScreenSpaceEventType.MOUSE_MOVE);
+
+    handler.setInputAction(function (position) {
+      flags.looking = false;
+    }, Cesium.ScreenSpaceEventType.LEFT_UP);
+
+    function getFlagForKeyCode(keyCode) {
+      switch (keyCode) {
+        case "W".charCodeAt(0):
+          return "moveForward";
+        case "S".charCodeAt(0):
+          return "moveBackward";
+        case "Q".charCodeAt(0):
+          return "moveUp";
+        case "E".charCodeAt(0):
+          return "moveDown";
+        case "D".charCodeAt(0):
+          return "moveRight";
+        case "A".charCodeAt(0):
+          return "moveLeft";
+        default:
+          return undefined;
+      }
+    }
+
+    document.addEventListener(
+      "keydown",
+      function (e) {
+        const flagName = getFlagForKeyCode(e.keyCode);
+        if (typeof flagName !== "undefined") {
+          flags[flagName] = true;
+        }
+      },
+      false
+    );
+
+    document.addEventListener(
+      "keyup",
+      function (e) {
+        const flagName = getFlagForKeyCode(e.keyCode);
+        if (typeof flagName !== "undefined") {
+          flags[flagName] = false;
+        }
+      },
+      false
+    );
+
+    viewer.clock.onTick.addEventListener(function (clock) {
+      const camera = viewer.camera;
+
+      if (flags.looking) {
+        const width = canvas.clientWidth;
+        const height = canvas.clientHeight;
+
+        // Coordinate (0.0, 0.0) will be where the mouse was clicked.
+        const x = (mousePosition.x - startMousePosition.x) / width;
+        const y = -(mousePosition.y - startMousePosition.y) / height;
+
+        const lookFactor = 0.05;
+        camera.lookRight(x * lookFactor);
+        camera.lookUp(y * lookFactor);
+      }
+
+      // Change movement speed based on the distance of the camera to the surface of the ellipsoid.
+      const cameraHeight = ellipsoid.cartesianToCartographic(
+        camera.position
+      ).height;
+      const moveRate = cameraHeight / 100.0;
+
+      if (flags.moveForward) {
+        camera.moveForward(moveRate);
+      }
+      if (flags.moveBackward) {
+        camera.moveBackward(moveRate);
+      }
+      if (flags.moveUp) {
+        camera.moveUp(moveRate);
+      }
+      if (flags.moveDown) {
+        camera.moveDown(moveRate);
+      }
+      if (flags.moveLeft) {
+        camera.moveLeft(moveRate);
+      }
+      if (flags.moveRight) {
+        camera.moveRight(moveRate);
+      }
+    });
+
+      
+      </script>
+
+    </div>
+
+</body>
+
+</html>
